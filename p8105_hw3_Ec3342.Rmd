@@ -67,7 +67,7 @@ kable(icecream_apples)
 ```
 
 
-#Describing the dataset!
+#Description of the instacart dataset!
 
 * The instacart dataset consists of `r nrow(instacart)` rows and `r ncol(instacart)` columns.
 * Some of the key variables are order_id and product_name

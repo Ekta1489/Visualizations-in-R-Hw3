@@ -13,7 +13,7 @@ library(ggplot2)
 
 # Question 1
 
-##Loading the instacart dataset
+##Loading the instacart dataset. Counting the number of aisles using the count function. The total number of isles are given by aisle_order_count. Finding out which aisles are the most items ordered from. 
 
 ```{r instacart}
 library(p8105.datasets)
@@ -21,7 +21,14 @@ data("instacart")
 insta_aisles = instacart %>% 
   count(aisle, name = "aisle_order_count") %>% 
   arrange(desc(aisle_order_count))
+```
 
+#Making a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered by using the filter function to limit this to aisles with more than 10000 items. aisle name is shown on y axis so that it is more legible.
+
+```{r ggplot}
+insta_aisles %>% 
+  filter(aisle_order_count > 10000) %>% 
+  ggplot(aes(x = aisle_order_count, y = aisle)) + geom_point()
 ```
 
 

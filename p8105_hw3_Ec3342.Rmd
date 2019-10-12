@@ -7,6 +7,8 @@ output: github_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
 ```
 
 # Question 1
@@ -16,6 +18,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r instacart}
 library(p8105.datasets)
 data("instacart")
+insta_aisles = instacart %>% 
+  count(aisle, name = "aisle_order_count") %>% 
+  arrange(desc(aisle_order_count))
+
 ```
 
 

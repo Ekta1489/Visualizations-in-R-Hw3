@@ -65,6 +65,8 @@ icecream_apples = instacart %>%
 kable(icecream_apples)
 
 ```
+
+
 #Describing the dataset!
 
 * The instacart dataset consists of `r nrow(instacart)` rows and `r ncol(instacart)` columns.

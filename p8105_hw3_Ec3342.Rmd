@@ -9,6 +9,7 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggplot2)
+library(knitr)
 ```
 
 # Question 1
@@ -16,19 +17,53 @@ library(ggplot2)
 ##Loading the instacart dataset. Counting the number of aisles using the count function. The total number of isles are given by aisle_order_count. Finding out which aisles are the most items ordered from. 
 
 ```{r instacart}
+
 library(p8105.datasets)
 data("instacart")
 insta_aisles = instacart %>% 
   count(aisle, name = "aisle_order_count") %>% 
   arrange(desc(aisle_order_count))
+
 ```
 
 #Making a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered by using the filter function to limit this to aisles with more than 10000 items. aisle name is shown on y axis so that it is more legible.
 
 ```{r ggplot}
+
 insta_aisles %>% 
   filter(aisle_order_count > 10000) %>% 
   ggplot(aes(x = aisle_order_count, y = aisle)) + geom_point()
+
+```
+#Creating a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”.Including the number of times each item is ordered.
+
+```{r popular items}
+
+instacart_new = instacart %>% 
+  select(aisle_id, aisle, product_name) %>% 
+  filter(aisle %in% c("baking ingredients", "dog food care", "packaged vegetables fruits")) %>%
+  count(aisle, product_name) %>% 
+  group_by(aisle) %>% 
+  top_n(3) 
+
+```
+#Creating a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; formating this table for human readers (i.e. produce a 2 x 7 table).
+
+```{r icecream_apples}
+
+icecream_apples = instacart %>% 
+  filter(product_name %in% c("Pink Lady Apples", "Coffee Ice Cream")) %>% 
+  select(order_dow, order_hour_of_day, product_name) %>%
+  arrange(desc(order_dow)) %>% 
+  group_by(order_dow) %>% 
+  summarise(average_order_hour_of_day = mean(order_hour_of_day)) %>% 
+  mutate(
+    order_dow = recode(
+      order_dow, `1` = 'Mon', `2` = 'Tues', `3` = 'Wed', `4` = 'Thur', `5` = 'Fri', `6` = 'Sat', `0` = 'Sun')
+    ) %>% 
+  pivot_wider(names_from = order_dow, values_from = average_order_hour_of_day)
+kable(icecream_apples)
+
 ```
 
 

@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggplot2)
 library(knitr)
+library(sqldf)
 ```
 
 # Question 1
@@ -86,9 +87,31 @@ health = brfss_smart2010 %>%
   filter(response %in% c("Poor","Fair","Good","Very good","Excellent")) 
  health$response = factor(health$response,levels = c("Poor","Fair","Good","Very good","Excellent"))
 health = arrange(health,response)
+```
+
+```{r}
+data("brfss_smart2010") 
+states = brfss_smart2010 %>% 
+  janitor::clean_names() %>%
+  select(locationabbr, locationdesc, year) %>% 
+  filter(year %in% c("2002","2010")) %>%
+  group_by(year, locationabbr) %>% 
+  summarise(n_location = n_distinct(locationdesc)) %>%
+  filter(n_location >= 7)
 
 ```
 ```{r}
+#data("brfss_smart2010") 
+#excellent = brfss_smart2010 %>% 
+#  janitor::clean_names() %>%
+#  select(year, locationabbr, response, data_value) %>% 
+#  filter(response == "Excellent") %>%
+#  group_by(year, locationabbr) %>% 
+#  summarise(mean_val = mean(data_value)) %/%
+  
+```
 
+```{r}
+#ggplot(excellent, aes(x = year, y = mean_val, color = factor(locationabbr))) +   geom_line() +   theme_bw()
 ```
 

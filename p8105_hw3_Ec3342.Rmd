@@ -101,17 +101,17 @@ states = brfss_smart2010 %>%
 
 ```
 ```{r}
-#data("brfss_smart2010") 
-#excellent = brfss_smart2010 %>% 
-#  janitor::clean_names() %>%
-#  select(year, locationabbr, response, data_value) %>% 
-#  filter(response == "Excellent") %>%
-#  group_by(year, locationabbr) %>% 
-#  summarise(mean_val = mean(data_value)) %/%
+data("brfss_smart2010") 
+excellent = brfss_smart2010 %>% 
+  janitor::clean_names() %>%
+  select(year, locationabbr, response, data_value) %>% 
+  filter(response == "Excellent") %>%
+ group_by(year, locationabbr) %>% 
+  summarise(mean_val = mean(data_value)) 
   
 ```
 
 ```{r}
-#ggplot(excellent, aes(x = year, y = mean_val, color = factor(locationabbr))) +   geom_line() +   theme_bw()
+ggplot(excellent, aes(x = year, y = mean_val, color = factor(locationabbr))) +   geom_line() +   theme_bw()
 ```
 

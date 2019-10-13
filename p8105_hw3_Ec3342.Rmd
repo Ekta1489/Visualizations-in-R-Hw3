@@ -76,3 +76,19 @@ kable(icecream_apples)
 * The 3 most popular items ordered from these aisles are: Baking ingredients: Light brown sugar (499), pure baking soda (387), and cane sugar (336); dog food care: Snack Sticks Chicken & Rice Recipe Dog Treats (30), Organix Chicken & Brown Rice Recipe (28), Small Dog Biscuits (26); packaged vegetables fruits: Organic Baby Spinach (9784), Organic Raspberries (5546), Organic Blueberries (4966)
 
 
+# Question 2
+
+```{r}
+data("brfss_smart2010") 
+health = brfss_smart2010 %>% 
+  janitor::clean_names() %>% 
+  filter(topic == "Overall Health") %>% 
+  filter(response %in% c("Poor","Fair","Good","Very good","Excellent")) 
+ health$response = factor(health$response,levels = c("Poor","Fair","Good","Very good","Excellent"))
+health = arrange(health,response)
+
+```
+```{r}
+
+```
+

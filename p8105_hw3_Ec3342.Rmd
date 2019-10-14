@@ -198,7 +198,6 @@ plot = brfss_smart2010 %>%
 
 ggplot(plot, aes(x = response, y = data_value, color = locationdesc)) +
   geom_point(alpha = 0.5) +
-  geom_smooth(se = FALSE) +
   facet_grid(year ~.) +
   labs(x = "Response", y = "Data Value", title = "Distribution of responses among locations in NY")
 

@@ -175,6 +175,8 @@ excellent = brfss_smart2010 %>%
 ggplot(excellent, aes(x = year, y = mean_val, color = factor(locationabbr))) +   geom_line() +   theme_bw()
 
 ```
+#Make a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.
+
 ```{r}
 plot = brfss_smart2010 %>%
   janitor::clean_names() %>%
@@ -188,9 +190,15 @@ plot = brfss_smart2010 %>%
   filter(response %in% c("Excellent", "Very good", "Good", "Fair","Poor")
   ) %>%
   filter(locationabbr == "NY") %>%
-  group_by(year, locationdesc, locationabbr) %>%
-  ggplot(aes(x = response, y = data_value, fill = locationdesc)) +
-  geom_bar(start = "identity", position = "dodge") +
+  group_by(year, locationdesc, locationabbr)
+```
+
+
+```{r}
+
+ggplot(plot, aes(x = response, y = data_value, color = locationdesc)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(se = FALSE) +
   facet_grid(year ~.) +
   labs(x = "Response", y = "Data Value", title = "Distribution of responses among locations in NY")
 

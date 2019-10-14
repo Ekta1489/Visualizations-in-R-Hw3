@@ -258,6 +258,8 @@ accel_data %>%
   scale_y_continuous(labels = scales::comma)
   
 ```
+
+
 #In Week 1, the total activity on Monday was low but the total activity on Monday increased on Week 3.
 #In Week 4 and Week 5, the total activity on Saturday has appreciable decreased.
 

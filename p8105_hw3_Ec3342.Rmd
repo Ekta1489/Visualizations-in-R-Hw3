@@ -109,7 +109,7 @@ health = brfss_smart2010 %>%
 
 ##In 2002, which states were observed at 7 or more locations? What about in 2010?
 
-```{r states 2002}
+```{r states}
 
 states_02 = 
   brfss_smart2010 %>%  
@@ -144,25 +144,6 @@ states_10 =
     ) %>%
   filter(n_location >= 7)
 
-#Alternatively, we could have done this by taking 2002 and 2010 together as below:
-
-states = 
-  brfss_smart2010 %>% 
-  janitor::clean_names() %>%
-  select(
-    locationabbr, locationdesc, year) %>% 
-  filter(
-    year %in% c("2002","2010")
-    ) %>%
-  group_by(
-    year, locationabbr
-    ) %>% 
-  summarise(
-    n_location = n_distinct(locationdesc)
-    ) %>%
-  filter(
-    n_location >= 7
-    )
 ```
 * In 2002, the states observed at 7 or more locations are : CT, FL, MA, NC, NJ, PA
 * In 2010, the states observed at 7 or more locations are : CA, CO, FL, MA, MD, NC, NE, NJ, NY, OH, PA, SC, TX, WA
@@ -217,28 +198,52 @@ plot = brfss_smart2010 %>%
 
 
 # Question 3
+#Load, tidy, and otherwise wrangle the data. Your final dataset should include all originally observed variables and values; have useful variable names; include a weekday vs weekend variable; and encode data with reasonable variable classes. Describe the resulting dataset (e.g. what variables exist, how many observations, etc).
+
 ```{r}
-accel_data = read_csv(file = "./data/accel_data.csv") %>%
-janitor::clean_names() %>%
+accel_data = read_csv(file = "./data/accel_data.csv") %>% #reading the csv file
+janitor::clean_names() %>% #cleaning variable names 
 mutate(
-  weekday_weekend = factor((day %in% c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')),levels = c(FALSE, TRUE), labels = c('Weekend', 'Weekday')) 
+  wkday_wkend = factor((day %in% c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')),levels = c(FALSE, TRUE), labels = c('Weekend', 'Weekday')) #Added a weekday vs weekend variable called wkday_wkend
 ) %>%
-select(week, day_id, day, weekday_weekend, everything()) 
+select(week, day_id, day, wkday_wkend, everything()) #selected the variables so that the table is more readable
 
 ```
+
+#Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent?
+
 ```{r activity}
-data = accel_data %>%
+accel_data %>%
 mutate(
-  total = rowSums(select(.,-week,-day_id,-day,-weekday_weekend))
+  total_act = rowSums(select(.,activity_1:activity_1440)) #created a total_act variable that aggregates across minutes
   ) %>%
-  select(week, day_id, day, weekday_weekend, total)
-
-ggplot(data, aes(x = day, y = total)) + geom_point()
-ggplot(data, aes(x = weekday_weekend, y = total)) + geom_point()
-ggplot(data, aes(x = week, y = total)) + geom_point()
-
-
+  select(week, day_id, day, wkday_wkend, total_act) %>%
+  kable()
 ```
+#There is no apparent trend seen, looking at the table. 
+
+#Making a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph.
+
+```{r, warning=FALSE, message=FALSE}
+
+accel_data %>%
+  mutate(total_act = rowSums(select(.,activity_1:activity_1440))
+         ) %>%
+  select(
+    week, day_id, day, wkday_wkend, total_act
+    ) %>%
+  ggplot(
+    aes(x = week, y = total_act, color = day)
+    ) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(size = 1, se = FALSE) +
+  theme_classic() +
+  theme(legend.position = "bottom") +
+  labs(x = "Week", y = "Activity count per day") +
+  scale_y_continuous(labels = scales::comma)
+  
+```
+
 
  
  

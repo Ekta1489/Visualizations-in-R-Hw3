@@ -222,9 +222,11 @@ ggplot(plot, aes(x = response, y = data_value, fill = locationdesc)) +
 accel_data = read_csv(file = "./data/accel_data.csv") %>% #reading the csv file
 janitor::clean_names() %>% #cleaning variable names 
 mutate(
-  wkday_wkend = factor((day %in% c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')),levels = c(FALSE, TRUE), labels = c('Weekend', 'Weekday')) #Added a weekday vs weekend variable called wkday_wkend
+  wkday_wkend = factor((day %in% c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')),
+                       levels = c(FALSE, TRUE), 
+                       labels = c('Weekend', 'Weekday'))
 ) %>%
-select(week, day_id, day, wkday_wkend, everything()) #selected the variables so that the table is more readable
+  select(week, day_id, day, wkday_wkend, everything())
 
 ```
 Description of accel_data:
@@ -278,15 +280,15 @@ accel_data %>%
   ggplot(
     aes(x = week, y = total_act, color = day)
     ) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(size = 1, se = FALSE) +
-  theme_classic() +
+  geom_point() +
+  geom_smooth(size = 0.5, se = FALSE) +
   theme(legend.position = "bottom") +
   labs(x = "Week", y = "Activity count per day") +
   scale_y_continuous(labels = scales::comma)
   
 ```
 
+* There is a lot of variation in the activity pattern for each day.
 * On Week 1, the total activity on Monday was low but the total activity on Monday increased on Week 3.
 * On Week 4 and Week 5, the total activity on Saturday has appreciable decreased.
 

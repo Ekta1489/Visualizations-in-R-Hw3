@@ -209,6 +209,7 @@ mutate(
 select(week, day_id, day, wkday_wkend, everything()) #selected the variables so that the table is more readable
 
 ```
+* The total number of rows in accel_data are `r nrow(accel_data)` and the total number of columns are `r ncol(accel_data)`.
 
 #Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent?
 
@@ -259,6 +260,6 @@ accel_data %>%
 ```
 
 
- 
+
  
 

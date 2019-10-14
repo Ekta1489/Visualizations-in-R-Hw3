@@ -217,9 +217,23 @@ accel_data %>%
 mutate(
   total_act = rowSums(select(.,activity_1:activity_1440)) #created a total_act variable that aggregates across minutes
   ) %>%
-  select(week, day_id, day, wkday_wkend, total_act) %>%
+  select(week, day_id, day, wkday_wkend, total_act) %>% 
+  mutate(
+    day_int = case_when(
+      day == "Monday" ~ 1,
+      day == "Tuesday" ~ 2,
+      day == "Wednesday" ~ 3,
+      day == "Thursday" ~ 4,
+      day == "Friday" ~ 5,
+      day == "Saturday" ~ 6,
+      day == "Sunday" ~ 7
+    )) %>%
+  arrange(week, day_int) %>% 
+  select(week, day, total_act) %>%
+  pivot_wider(names_from = week, values_from = total_act) %>%
   kable()
 ```
+
 #There is no apparent trend seen, looking at the table. 
 
 #Making a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph.

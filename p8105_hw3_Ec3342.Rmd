@@ -82,7 +82,7 @@ kable(icecream_apples)
 Description of the instacart dataset!
 
 * The instacart dataset consists of `r nrow(instacart)` rows and `r ncol(instacart)` columns.
-* Some of the key variables are order_id, product_name, aisle, aisle_id, order_number
+* Some of the key variables are order_id, product_name, aisle, aisle_id, order_number.
 * The total number of aisles are 134.
 * The maximum number of orders are placed from the fresh vegetables and fresh fruits aisle. 
 * The 3 most popular items ordered from the Baking ingredients,dog food care and packaged vegetables fruits aisles are   as follows: 
@@ -181,6 +181,7 @@ excellent = brfss_smart2010 %>%
 ggplot(excellent, aes(x = year, y = mean_val, color = factor(locationabbr))) +   geom_line() +   theme_bw()
 
 ```
+
 #Making a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.
 
 ```{r}

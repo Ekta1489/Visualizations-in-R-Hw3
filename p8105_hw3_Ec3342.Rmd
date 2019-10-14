@@ -227,7 +227,15 @@ mutate(
 select(week, day_id, day, wkday_wkend, everything()) #selected the variables so that the table is more readable
 
 ```
-* The total number of rows in accel_data are `r nrow(accel_data)` and the total number of columns are `r ncol(accel_data)`.
+#Description of accel_data:
+
+* The dataset represents `r nrow(accel_data)` observations of `r ncol(accel_data)` variables.
+* The dataset has the following variables:
+  1) week which is a numeric variable; 1 represents week1, 2 represents week2, 3 represents week3, 4 represents week4      and 5 represents week5.
+  2) day_id which is a numeric variable.
+  3) day which is a character variable.
+  4) wkday_wkend which is a factor variable with 2 levels - Weekday, Weekend.
+  5) activity_1 to activity_1440 which are numeric variable.
 
 #Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent?
 
@@ -277,9 +285,8 @@ accel_data %>%
   
 ```
 
-
-#In Week 1, the total activity on Monday was low but the total activity on Monday increased on Week 3.
-#In Week 4 and Week 5, the total activity on Saturday has appreciable decreased.
+* On Week 1, the total activity on Monday was low but the total activity on Monday increased on Week 3.
+* On Week 4 and Week 5, the total activity on Saturday has appreciable decreased.
 
 
 

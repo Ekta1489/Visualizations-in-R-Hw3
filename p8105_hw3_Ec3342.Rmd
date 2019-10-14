@@ -178,7 +178,7 @@ excellent = brfss_smart2010 %>%
 
 ```{r spaghetti plot}
 
-ggplot(excellent, aes(x = year, y = mean_val, color = factor(locationabbr))) +   geom_line() +   theme_bw()
+ggplot(excellent, aes(x = year, y = mean_val, color = factor(locationabbr))) +   geom_line() +   theme_classic()
 
 ```
 

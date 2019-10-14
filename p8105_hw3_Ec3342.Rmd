@@ -15,7 +15,7 @@ library(forcats)
 
 # Question 1
 
-##Loading the instacart dataset. Counting the number of aisles using the count function. The total number of isles are given by aisle_order_count. Finding out which aisles are the most items ordered from. 
+##Loading the instacart dataset. Counting the number of aisles using the count function. The total number of aisles are given by aisle_order_count. Finding out which aisles are the most items ordered from. 
 
 ```{r instacart}
 
@@ -49,8 +49,11 @@ instacart_new = instacart %>%
   count(aisle, product_name) %>% 
   group_by(aisle) %>% 
   top_n(3) 
+  kable(instacart_new)
+
 
 ```
+
 #Creating a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; formating this table for human readers (i.e. produce a 2 x 7 table).
 
 ```{r icecream_apples}
@@ -75,17 +78,19 @@ kable(icecream_apples)
 
 ```
 
-
 #Description of the instacart dataset!
 
 * The instacart dataset consists of `r nrow(instacart)` rows and `r ncol(instacart)` columns.
 * Some of the key variables are order_id, product_name, aisle, aisle_id, order_number
 * The total number of aisles are 134.
 * The maximum number of orders are placed from the fresh vegetables and fresh fruits aisle. 
-* The 3 most popular items ordered from these aisles are: Baking ingredients: Light brown sugar (499), pure baking soda (387), and cane sugar (336); dog food care: Snack Sticks Chicken & Rice Recipe Dog Treats (30), Organix Chicken & Brown Rice Recipe (28), Small Dog Biscuits (26); packaged vegetables fruits: Organic Baby Spinach (9784), Organic Raspberries (5546), Organic Blueberries (4966)
+* The 3 most popular items ordered from the Baking ingredients,dog food care and packaged vegetables fruits aisles are   as follows: 
+  Baking ingredients: Light brown sugar (499), pure baking soda (387), and cane sugar (336); 
+  dog food care: Snack  Sticks Chicken & Rice Recipe Dog Treats (30), Organix Chicken & Brown Rice Recipe (28), Small   Dog Biscuits (26); 
+  packaged vegetables fruits: Organic Baby Spinach (9784), Organic Raspberries (5546), Organic Blueberries (4966)
 
 # Question 2
-##Loading the BRFSS data and cleaning the data. Formatted the data to use appropriate variable names. Filtered the topic to "Overall Health", included only responses from “Excellent” to “Poor”, Organize responses as a factor taking levels ordered from “Poor” to “Excellent”
+##Loading the BRFSS data and cleaning the data. Formatted the data to use appropriate variable names. Filtered the topic to "Overall Health", included only responses from “Excellent” to “Poor”, Organized responses as a factor taking levels ordered from “Poor” to “Excellent”
 
 ```{r health}
 
@@ -158,17 +163,17 @@ excellent = brfss_smart2010 %>%
     year, locationabbr, response, data_value
     ) %>% 
   filter(
-    response == "Excellent"
+    response == "Excellent" #limiting the dataset to include only Excellent responses
     ) %>%
  group_by(
    year, locationabbr
    ) %>% 
   summarise(
-    mean_val = mean(data_value)
+    mean_val = mean(data_value) #variable that averages the data_value across locations within a state
     )
 ```
 
-#Making a “spaghetti” plot of this average value over time within a state (that is, make a plot showing a line for each state across years
+#Making a “spaghetti” plot of this average value over time within a state (that is, make a plot showing a line for each state across years. This spaghetti plot looks messy.
 
 ```{r spaghetti plot}
 
@@ -182,13 +187,19 @@ plot = brfss_smart2010 %>%
   janitor::clean_names() %>%
   filter(
     year %in% c("2006","2010")
-  ) %>%
+    ) %>%
   select(
     year, locationabbr, response, data_value, locationdesc
     ) %>%
   drop_na() %>%
-  filter(response %in% c("Excellent", "Very good", "Good", "Fair","Poor")
-  ) %>%
+  filter(
+    response %in% c("Excellent", "Very good", "Good", "Fair","Poor")
+    ) %>%
+  mutate(
+    response = as.factor(response),
+    response = fct_relevel(
+      response, "Poor","Fair","Good","Very good","Excellent")
+    ) %>%
   filter(locationabbr == "NY") %>%
   group_by(year, locationdesc, locationabbr)
 ```

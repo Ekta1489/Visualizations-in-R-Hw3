@@ -10,7 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggplot2)
 library(knitr)
-library(sqldf)
 library(forcats)
 ```
 
@@ -23,9 +22,10 @@ library(forcats)
 library(p8105.datasets)
 data("instacart")
 insta_aisles = instacart %>% 
-  count(aisle, name = "aisle_order_count") %>% 
-  arrange(desc(aisle_order_count))
+  count(aisle, name = "aisle_order_count") %>% #counting the number of aisles 
+  arrange(desc(aisle_order_count)) #arranging the aisle_order_count by descending
 
+# The maximum number of orders are placed from the fresh vegetables and fresh fruits aisle. 
 ```
 
 #Making a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered by using the filter function to limit this to aisles with more than 10000 items. aisle name is shown on y axis so that it is more legible.
@@ -42,10 +42,10 @@ insta_aisles %>%
 ```{r popular items}
 
 instacart_new = instacart %>% 
-  select(aisle_id, aisle, product_name) %>% 
+  select(aisle_id, aisle, product_name) %>% #selected the variables aisle_id, aisle, product_name
   filter(
-    aisle %in% c("baking ingredients", "dog food care", "packaged vegetables fruits")
-    ) %>%
+    aisle %in% c("baking ingredients", "dog food care", "packaged vegetables fruits")) %>% 
+  #Filtered to include the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”
   count(aisle, product_name) %>% 
   group_by(aisle) %>% 
   top_n(3) 
@@ -79,11 +79,10 @@ kable(icecream_apples)
 #Description of the instacart dataset!
 
 * The instacart dataset consists of `r nrow(instacart)` rows and `r ncol(instacart)` columns.
-* Some of the key variables are order_id and product_name
+* Some of the key variables are order_id, product_name, aisle, aisle_id, order_number
 * The total number of aisles are 134.
 * The maximum number of orders are placed from the fresh vegetables and fresh fruits aisle. 
 * The 3 most popular items ordered from these aisles are: Baking ingredients: Light brown sugar (499), pure baking soda (387), and cane sugar (336); dog food care: Snack Sticks Chicken & Rice Recipe Dog Treats (30), Organix Chicken & Brown Rice Recipe (28), Small Dog Biscuits (26); packaged vegetables fruits: Organic Baby Spinach (9784), Organic Raspberries (5546), Organic Blueberries (4966)
-
 
 # Question 2
 ##Loading the BRFSS data and cleaning the data. Formatted the data to use appropriate variable names. Filtered the topic to "Overall Health", included only responses from “Excellent” to “Poor”, Organize responses as a factor taking levels ordered from “Poor” to “Excellent”
@@ -92,70 +91,155 @@ kable(icecream_apples)
 
 data("brfss_smart2010") 
 health = brfss_smart2010 %>% 
-  janitor::clean_names() %>% 
-  filter(topic == "Overall Health") %>%
-filter(response %in% c("Poor","Fair","Good","Very good","Excellent")) %>%
+  janitor::clean_names() %>% #formatted the data to use appropriate variable names
+  filter(
+    topic == "Overall Health"
+    ) %>% #focused on the “Overall Health” topic
+  filter(
+    response %in% c("Excellent","Very good","Good","Fair","Poor")
+    ) %>% #included only responses from “Excellent”to “Poor”
   mutate(
     response = as.factor(response),
-    response = fct_relevel(response, "Poor","Fair","Good","Very good","Excellent")) %>%
-      arrange(response)
+    response = fct_relevel(
+      response, "Poor","Fair","Good","Very good","Excellent")
+    ) %>% #organized responses as factors. 
+  arrange(response) 
+
 ```
 
 ##In 2002, which states were observed at 7 or more locations? What about in 2010?
 
 ```{r states 2002}
 
-states_02 = brfss_smart2010 %>%  
-  janitor::clean_names() %>%
+states_02 = 
+  brfss_smart2010 %>%  
+  janitor::clean_names() %>% #formatted the data to use appropriate variable names
   select(
-    locationabbr, locationdesc, year) %>% 
-  filter(year == "2002") %>%
-  group_by(locationabbr) %>% 
-  summarise(n_location = n_distinct(locationdesc)) %>%
+    locationabbr, locationdesc, year
+    ) %>% 
+  filter(
+    year == "2002"
+    ) %>% #filtered to include only the year 2002
+  group_by(
+    locationabbr
+    ) %>% 
+  summarise(
+    n_location = n_distinct(locationdesc) 
+    ) %>%
   filter(n_location >= 7)
 
-states_10 = brfss_smart2010 %>%  
-  janitor::clean_names() %>%
+states_10 = 
+  brfss_smart2010 %>%  
+  janitor::clean_names() %>% #formatted the data to use appropriate variable names
   select(
     locationabbr, locationdesc, year) %>% 
-  filter(year == "2010") %>%
-  group_by(locationabbr) %>% 
-  summarise(n_location = n_distinct(locationdesc)) %>%
+  filter(
+    year == "2010" #filtered to include only the year 2010
+    ) %>%
+  group_by(
+    locationabbr
+    ) %>% 
+  summarise(
+    n_location = n_distinct(locationdesc)
+    ) %>%
   filter(n_location >= 7)
 
-data("brfss_smart2010") 
-states = brfss_smart2010 %>% 
+#Alternatively, we could have done this by taking 2002 and 2010 together as below:
+
+states = 
+  brfss_smart2010 %>% 
   janitor::clean_names() %>%
   select(
     locationabbr, locationdesc, year) %>% 
   filter(
-    year %in% c("2002","2010")) %>%
-  group_by(year, locationabbr) %>% 
-  summarise(n_location = n_distinct(locationdesc)) %>%
-  filter(n_location >= 7)
+    year %in% c("2002","2010")
+    ) %>%
+  group_by(
+    year, locationabbr
+    ) %>% 
+  summarise(
+    n_location = n_distinct(locationdesc)
+    ) %>%
+  filter(
+    n_location >= 7
+    )
 ```
 * In 2002, the states observed at 7 or more locations are : CT, FL, MA, NC, NJ, PA
-* In 2010, the states observed at 7 or more locations are : CA, CO, FL, MA, MD, NC
+* In 2010, the states observed at 7 or more locations are : CA, CO, FL, MA, MD, NC, NE, NJ, NY, OH, PA, SC, TX, WA
 
-```{r states}
-#Construct a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state.
-```
-
+#Constructed a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state.
 
 ```{r excellent}
 
-data("brfss_smart2010") 
 excellent = brfss_smart2010 %>% 
   janitor::clean_names() %>%
-  select(year, locationabbr, response, data_value) %>% 
-  filter(response == "Excellent") %>%
- group_by(year, locationabbr) %>% 
-  summarise(mean_val = mean(data_value)) 
-  
+  select(
+    year, locationabbr, response, data_value
+    ) %>% 
+  filter(
+    response == "Excellent"
+    ) %>%
+ group_by(
+   year, locationabbr
+   ) %>% 
+  summarise(
+    mean_val = mean(data_value)
+    )
 ```
 
-```{r}
+#Making a “spaghetti” plot of this average value over time within a state (that is, make a plot showing a line for each state across years
+
+```{r spaghetti plot}
+
 ggplot(excellent, aes(x = year, y = mean_val, color = factor(locationabbr))) +   geom_line() +   theme_bw()
+
 ```
+```{r}
+plot = brfss_smart2010 %>%
+  janitor::clean_names() %>%
+  filter(
+    year %in% c("2006","2010")
+  ) %>%
+  select(
+    year, locationabbr, response, data_value, locationdesc
+    ) %>%
+  drop_na() %>%
+  filter(response %in% c("Excellent", "Very good", "Good", "Fair","Poor")
+  ) %>%
+  filter(locationabbr == "NY") %>%
+  group_by(year, locationdesc, locationabbr) %>%
+  ggplot(aes(x = response, y = data_value, fill = locationdesc)) +
+  geom_bar(start = "identity", position = "dodge") +
+  facet_grid(year ~.) +
+  labs(x = "Response", y = "Data Value", title = "Distribution of responses among locations in NY")
+
+```
+
 
 # Question 3
+```{r}
+accel_data = read_csv(file = "./data/accel_data.csv") %>%
+janitor::clean_names() %>%
+mutate(
+  weekday_weekend = factor((day %in% c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')),levels = c(FALSE, TRUE), labels = c('Weekend', 'Weekday')) 
+) %>%
+select(week, day_id, day, weekday_weekend, everything()) 
+
+```
+```{r activity}
+data = accel_data %>%
+mutate(
+  total = rowSums(select(.,-week,-day_id,-day,-weekday_weekend))
+  ) %>%
+  select(week, day_id, day, weekday_weekend, total)
+
+ggplot(data, aes(x = day, y = total)) + geom_point()
+ggplot(data, aes(x = weekday_weekend, y = total)) + geom_point()
+ggplot(data, aes(x = week, y = total)) + geom_point()
+
+
+```
+
+ 
+ 
+

@@ -15,7 +15,7 @@ library(forcats)
 
 # Question 1
 
-##Loading the instacart dataset. Counting the number of aisles using the count function. The total number of aisles are given by aisle_order_count. Finding out which aisles are the most items ordered from. 
+Loading the instacart dataset. Counting the number of aisles using the count function. The total number of aisles are given by aisle_order_count. Finding out which aisles are the most items ordered from. 
 
 ```{r instacart}
 
@@ -28,7 +28,7 @@ insta_aisles = instacart %>%
 # The maximum number of orders are placed from the fresh vegetables and fresh fruits aisle. 
 ```
 
-#Making a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered by using the filter function to limit this to aisles with more than 10000 items. aisle name is shown on y axis so that it is more legible.
+Making a plot that shows the number of items ordered in each aisle, limiting this to aisles with more than 10000 items ordered by using the filter function to limit this to aisles with more than 10000 items. aisle name is shown on y axis so that it is more legible.
 
 ```{r ggplot}
 
@@ -37,7 +37,7 @@ insta_aisles %>%
   ggplot(aes(x = aisle_order_count, y = aisle)) + geom_point()
 
 ```
-#Creating a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”.Including the number of times each item is ordered.
+Creating a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”.Including the number of times each item is ordered.
 
 ```{r popular items}
 
@@ -54,7 +54,7 @@ instacart_new = instacart %>%
 
 ```
 
-#Creating a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; formating this table for human readers (i.e. produce a 2 x 7 table).
+Creating a table showing the mean hour of the day at which Pink Lady Apples and Coffee Ice Cream are ordered on each day of the week; formating this table for human readers (i.e. produce a 2 x 7 table).
 
 ```{r icecream_apples}
 
@@ -78,7 +78,7 @@ kable(icecream_apples)
 
 ```
 
-#Description of the instacart dataset!
+Description of the instacart dataset!
 
 * The instacart dataset consists of `r nrow(instacart)` rows and `r ncol(instacart)` columns.
 * Some of the key variables are order_id, product_name, aisle, aisle_id, order_number
@@ -90,7 +90,8 @@ kable(icecream_apples)
   packaged vegetables fruits: Organic Baby Spinach (9784), Organic Raspberries (5546), Organic Blueberries (4966)
 
 # Question 2
-##Loading the BRFSS data and cleaning the data. Formatted the data to use appropriate variable names. Filtered the topic to "Overall Health", included only responses from “Excellent” to “Poor”, Organized responses as a factor taking levels ordered from “Poor” to “Excellent”
+
+Loading the BRFSS data and cleaning the data. Formatted the data to use appropriate variable names. Filtered the topic to "Overall Health", included only responses from “Excellent” to “Poor”, Organized responses as a factor taking levels ordered from “Poor” to “Excellent”
 
 ```{r health}
 
@@ -112,7 +113,7 @@ health = brfss_smart2010 %>%
 
 ```
 
-##In 2002, which states were observed at 7 or more locations? What about in 2010?
+In 2002, which states were observed at 7 or more locations? What about in 2010?
 
 ```{r states}
 
@@ -153,7 +154,7 @@ states_10 =
 * In 2002, the states observed at 7 or more locations are : CT, FL, MA, NC, NJ, PA
 * In 2010, the states observed at 7 or more locations are : CA, CO, FL, MA, MD, NC, NE, NJ, NY, OH, PA, SC, TX, WA
 
-#Constructed a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state.
+Constructed a dataset that is limited to Excellent responses, and contains, year, state, and a variable that averages the data_value across locations within a state.
 
 ```{r excellent}
 
@@ -173,14 +174,14 @@ excellent = brfss_smart2010 %>%
     )
 ```
 
-#Making a “spaghetti” plot of this average value over time within a state (that is, make a plot showing a line for each state across years. This spaghetti plot looks messy.
+Making a “spaghetti” plot of this average value over time within a state (that is, make a plot showing a line for each state across years. This spaghetti plot looks messy.
 
 ```{r spaghetti plot}
 
 ggplot(excellent, aes(x = year, y = mean_val, color = factor(locationabbr))) +   geom_line() +   theme_bw()
 
 ```
-#Make a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.
+Making a two-panel plot showing, for the years 2006, and 2010, distribution of data_value for responses (“Poor” to “Excellent”) among locations in NY State.
 
 ```{r}
 plot = brfss_smart2010 %>%
@@ -216,7 +217,8 @@ ggplot(plot, aes(x = response, y = data_value, color = locationdesc)) +
 
 
 # Question 3
-#Load, tidy, and otherwise wrangle the data. Your final dataset should include all originally observed variables and values; have useful variable names; include a weekday vs weekend variable; and encode data with reasonable variable classes. Describe the resulting dataset (e.g. what variables exist, how many observations, etc).
+
+Load, tidy, and otherwise wrangle the data. Your final dataset should include all originally observed variables and values; have useful variable names; include a weekday vs weekend variable; and encode data with reasonable variable classes. Describe the resulting dataset (e.g. what variables exist, how many observations, etc).
 
 ```{r}
 accel_data = read_csv(file = "./data/accel_data.csv") %>% #reading the csv file
@@ -227,7 +229,7 @@ mutate(
 select(week, day_id, day, wkday_wkend, everything()) #selected the variables so that the table is more readable
 
 ```
-#Description of accel_data:
+Description of accel_data:
 
 * The dataset represents `r nrow(accel_data)` observations of `r ncol(accel_data)` variables.
 * The dataset has the following variables:
@@ -237,7 +239,7 @@ select(week, day_id, day, wkday_wkend, everything()) #selected the variables so 
   4) wkday_wkend which is a factor variable with 2 levels - Weekday, Weekend.
   5) activity_1 to activity_1440 which are numeric variable.
 
-#Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent?
+Using your tidied dataset, aggregate accross minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent?
 
 ```{r activity}
 accel_data %>%
@@ -261,9 +263,9 @@ mutate(
   kable()
 ```
 
-#There is no apparent trend seen, looking at the table. 
+*There is no apparent trend seen, looking at the table. 
 
-#Making a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph.
+Making a single-panel plot that shows the 24-hour activity time courses for each day and use color to indicate day of the week. Describe in words any patterns or conclusions you can make based on this graph.
 
 ```{r, warning=FALSE, message=FALSE}
 

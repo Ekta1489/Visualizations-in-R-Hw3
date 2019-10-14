@@ -33,10 +33,11 @@ Making a plot that shows the number of items ordered in each aisle, limiting thi
 ```{r ggplot}
 
 insta_aisles %>% 
-  filter(aisle_order_count > 10000) %>% 
-  ggplot(aes(x = aisle_order_count, y = aisle)) + geom_point()
+  filter(aisle_order_count > 10000) %>% #limiting to aisles with more than 10000 items ordered.
+  ggplot(aes(x = aisle_order_count, y = aisle)) + geom_point() #creating a scatter plot with aisle name on y axis to make it more legible.
 
 ```
+
 Creating a table showing the three most popular items in each of the aisles “baking ingredients”, “dog food care”, and “packaged vegetables fruits”.Including the number of times each item is ordered.
 
 ```{r popular items}
@@ -208,8 +209,8 @@ plot = brfss_smart2010 %>%
 
 ```{r}
 
-ggplot(plot, aes(x = response, y = data_value, color = locationdesc)) +
-  geom_point(alpha = 0.5) +
+ggplot(plot, aes(x = response, y = data_value, fill = locationdesc)) +
+  geom_bar(stat = "identity", position = "fill") +
   facet_grid(year ~.) +
   labs(x = "Response", y = "Data Value", title = "Distribution of responses among locations in NY")
 
